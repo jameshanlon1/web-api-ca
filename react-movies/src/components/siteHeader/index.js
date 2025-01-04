@@ -34,7 +34,6 @@ const SiteHeader = (props) => {
     { label: "Top Rated", path: "/movies/ratings" },
     { label: "Actors", path: "/movies/actors" },
     { label: <SearchIcon />, path: "/movies/search" },
-    { label: "Login", path: "/movies/login" }
 
 
   ];
@@ -107,14 +106,32 @@ const SiteHeader = (props) => {
               </>
             )}
         {context.isAuthenticated ? (
-            <Typography variant="h4" sx={{ flexGrow: 1 }}>
-              Welcome {context.userName}!{" "}
-              <button onClick={() => context.signout()}>Sign out</button>
+            <Typography variant="h6" sx={{ marginLeft: 2 }}>
+                <span
+                style={{
+                  color: "#000000", 
+                  marginRight: "15px", 
+                }}>
+              Welcome {context.userName}!{" "}</span>
+              <Button
+                sx={{
+                  color: "white",
+                  textTransform: "uppercase",
+                }} onClick={() => context.signout()}>Sign out</Button>
             </Typography>
           ) : (
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              You are not logged in{" "}
-              <button onClick={() => navigate('/movies/login')}>Login</button>
+            <Typography variant="h6" sx={{ marginLeft: 2 }}>
+                <span
+                style={{
+                  color: "#000000", 
+                  marginRight: "15px", 
+                }}>
+                You are not logged in</span>
+              <Button
+                sx={{
+                  color: "white",
+                  textTransform: "uppercase",
+                }} onClick={() => navigate('/movies/login')}>Login</Button>
             </Typography>
           )}
         </Toolbar>

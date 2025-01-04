@@ -45,8 +45,8 @@ const context = useContext(AuthContext);
       <Typography variant="h4" component="h3">
         Login
       </Typography>
-      <p>You must log in to view the protected pages </p>
     </Paper>
+
     <Container maxWidth="sm" sx={{ mt: 5 }}>
       <Box
         component="form"
@@ -56,7 +56,9 @@ const context = useContext(AuthContext);
           gap: 2,
         }}
       >
-        
+      <Typography variant="h6" component="h6">
+      You must log in to view the protected pages
+      </Typography>
         <TextField
           id="username"
           label="Username"

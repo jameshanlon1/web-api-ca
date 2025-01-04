@@ -20,6 +20,7 @@ import SearchPage from './pages/searchPage';
 import SignupPage from './pages/signupPage';
 import LoginPage from './pages/loginPage';
 import AuthContextProvider from './contexts/authContext';
+import ProtectedRoutes from './protectedRoutes';
 
 
 const queryClient = new QueryClient({
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/movies/:id" element={<MoviePage />} />
             <Route path="/movies/actors/:id" element={<ActorDetailPage />} />
 
+            <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/movies/upcoming" element={<Upcoming />} />
             <Route path="/movies/trending/today" element={<Trending />} />
@@ -55,10 +57,11 @@ const App = () => {
             <Route path="/movies/actors" element={ <ActorPage /> } />
 
             <Route path="/movies/search" element={ <SearchPage /> } />
-
+            </Route>
 
             <Route path="/movies/signup" element={<SignupPage/>} />
             <Route path="/movies/login" element={<LoginPage/>} />
+            
 
             
             <Route path="*" element={ <Navigate to="/" /> } />
