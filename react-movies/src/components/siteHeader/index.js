@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -12,16 +12,18 @@ import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import SearchIcon from "@mui/icons-material/Search";
+import { AuthContext } from "../../contexts/authContext";
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
-const SiteHeader = ({ history }) => {
+const SiteHeader = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   
+  const context = useContext(AuthContext);
   const navigate = useNavigate();
 
   const menuOptions = [
@@ -45,7 +47,7 @@ const SiteHeader = ({ history }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  return (
+  return(
     <>
       <AppBar position="fixed" color="secondary">
         <Toolbar>
@@ -104,6 +106,17 @@ const SiteHeader = ({ history }) => {
                 ))}
               </>
             )}
+        {context.isAuthenticated ? (
+            <Typography variant="h4" sx={{ flexGrow: 1 }}>
+              Welcome {context.userName}!{" "}
+              <button onClick={() => context.signout()}>Sign out</button>
+            </Typography>
+          ) : (
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              You are not logged in{" "}
+              <button onClick={() => navigate('/movies/login')}>Login</button>
+            </Typography>
+          )}
         </Toolbar>
       </AppBar>
       <Offset />

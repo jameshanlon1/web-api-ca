@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -6,78 +6,31 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 import { signOut } from "firebase/auth";
 import {auth} from "../firebase"
 import { signInUser } from "../firebase";
+import { AuthContext } from "../contexts/authContext";
 
-const LoginPage = () => {
-const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+const LoginPage = props => {
+const context = useContext(AuthContext);
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
 
-  useEffect(()=>{
-    onAuthStateChanged(auth, (user)=> {
-            if(user){
-                setUser(user);
-            }else{
-                setUser(null);
-            }
-  })
-    });
- 
-    const onLogin = (e) =>{
-        e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
-        .then((userCredentails) => {
-            //signed in here
-            const user = userCredentails.user;
-            navigate("/movies")
-            console.log(user);
-        })
-        .catch((error) =>{
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage)
-        });
-    };
-
-        const logout = () => {
-            signOut(auth).then(() =>{
-                navigate("/movies/login");
-                    console.log("Signed out")
-
-            }).catch((error)=> {
-            });
-        
-        
+  const login = () => {
+    context.authenticate(userName, password)
   };
-  if (user){
-    return(
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <Typography variant="h6" component="p" style={{ marginBottom: '10px' }}>
-          You are already logged in successfully. Enjoy the website.
-      </Typography>
-      <button 
-          onClick={logout} 
-          style={{
-              padding: '10px 20px',
-              backgroundColor: '#007BFF',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontSize: '16px',
-          }}
-      >
-          Logout
-      </button>
-  </div>
-    )
+
+  let location = useLocation();
+
+  const { from } = location.state ? { from: location.state.from.pathname } : { from: "/" };
+
+  if (context.isAuthenticated === true) {
+    return <Navigate to={from} />;
   }
+
   return (
     <>
     <Paper 
@@ -87,11 +40,12 @@ const navigate = useNavigate();
         justifyContent: "space-around",
         flexWrap: "wrap",
         marginBottom: 1.5,
-      }}
+      }} 
       >
       <Typography variant="h4" component="h3">
         Login
       </Typography>
+      <p>You must log in to view the protected pages </p>
     </Paper>
     <Container maxWidth="sm" sx={{ mt: 5 }}>
       <Box
@@ -104,17 +58,17 @@ const navigate = useNavigate();
       >
         
         <TextField
-          label="Email Address"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          id="username"
+          label="Username"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           fullWidth
           required
           variant="outlined"
         />
         <TextField
+          id="password"
           label="Password"
-          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           fullWidth
@@ -129,11 +83,11 @@ const navigate = useNavigate();
           }}
         >
         </Box>
-        <Button variant="contained" color="primary" fullWidth onClick={onLogin}>
+        <Button variant="contained" color="primary" fullWidth onClick={login}>
           Login
         </Button>
         <Typography variant="body2" textAlign="center">
-          Don't have an account? <Link href="/movies/signup">Register</Link>
+          Not Registered?<Link href="/movies/signup">Sign Up!</Link>
         </Typography>
       </Box>
     </Container>

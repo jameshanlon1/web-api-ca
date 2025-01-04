@@ -19,6 +19,7 @@ import ActorDetailPage from './pages/actorDetailsPage';
 import SearchPage from './pages/searchPage';
 import SignupPage from './pages/signupPage';
 import LoginPage from './pages/loginPage';
+import AuthContextProvider from './contexts/authContext';
 
 
 const queryClient = new QueryClient({
@@ -35,6 +36,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <AuthContextProvider>
         <SiteHeader />
         <MoviesContextProvider>
           <Routes>
@@ -61,7 +63,9 @@ const App = () => {
             
             <Route path="*" element={ <Navigate to="/" /> } />
           </Routes>
+          
         </MoviesContextProvider>
+        </AuthContextProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
