@@ -1,37 +1,36 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import { NavLink, useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
-
-import { signUpUser } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Navigate } from "react-router-dom";
+import { AuthContext } from "../contexts/authContext";
 
 const SignupPage = () => {
-    const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const context = useContext(AuthContext)
 
-    const onSubmit = async (e) =>{
-        e.preventDefault();
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordAgain, setPasswordAgain] = useState("");
+    const [registered, setRegistered] = useState(false)
 
-        await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredentails) => {
-            const user = userCredentails.user;
-            navigate("/movies/login")
-        
-        })
-        .catch((error) =>{
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage)
-        });
-    
-  };
+
+    const register = () => {
+      let passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      const validPassword = passwordRegEx.test(password);
+  
+      if (validPassword && password === passwordAgain) {
+        context.register(userName, password);
+        setRegistered(true);
+      }
+    }
+  
+    if (registered === true) {
+      return <Navigate to="/movies/login" />;
+    }
+
   return (
     <>
     <Paper 
@@ -44,7 +43,7 @@ const SignupPage = () => {
       }}
       >
       <Typography variant="h4" component="h3">
-        Login
+        Register
       </Typography>
     </Paper>
     <Container maxWidth="sm" sx={{ mt: 5 }}>
@@ -58,23 +57,29 @@ const SignupPage = () => {
       >
         
         <TextField
-          label="Email Address"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-          required
-          variant="outlined"
-        />
-        <TextField
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          fullWidth
-          required
-          variant="outlined"
-        />
+                  label="Username"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                />
+                <TextField
+                  label="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                />
+                <TextField
+                  label="Password Again"
+                  value={passwordAgain}
+                  onChange={(e) => setPasswordAgain(e.target.value)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                />
         <Box
           sx={{
             display: "flex",
@@ -83,7 +88,7 @@ const SignupPage = () => {
           }}
         >
         </Box>
-        <Button variant="contained" color="primary" fullWidth onClick={onSubmit}>
+        <Button variant="contained" color="primary" fullWidth onClick={register}>
           Register
         </Button>
       </Box>
