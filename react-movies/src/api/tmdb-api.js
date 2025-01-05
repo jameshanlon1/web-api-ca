@@ -366,15 +366,20 @@ export const getTopRatedMovies = async () => {
   return response.json();
 };
 
-export const searchMovies = async () => {
+export const searchMovies = async (query) => {
+  try{
   const response = await fetch(
-    'http://localhost:8080/api/movies/tmdb/search', {
+    `http://localhost:8080/api/movies/tmdb/search?query=${encodeURIComponent(query)}`,
+    {
     headers: {
       'Authorization': window.localStorage.getItem('token')
     }
   }
   )
-  return response.json();
+  return await response.json();
+} catch (error) {
+  throw error;
+}
 };
 
 

@@ -73,8 +73,10 @@ router.get('/tmdb/topRated', asyncHandler(async (req, res) => {
 }));
 
 router.get('/tmdb/search', asyncHandler(async (req, res) => {
-    const search = await searchMovies();
-    res.status(200).json(search);
+    const query = req.query.query; // Get the search query from the request query parameter
+    const searchResults = await searchMovies(query);
+    res.status(200).json(searchResults);
+
 }));
 
 
