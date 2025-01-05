@@ -82,7 +82,11 @@ router.get('/tmdb/search', asyncHandler(async (req, res) => {
 router.get('/tmdb/:id', asyncHandler(async (req, res) => {
     const { id } = req.params;
     const movie = await getMovie(id);
-    res.status(200).json(movie);
+    if (movie) {
+        res.status(200).json(movie);
+    } else {
+        res.status(404).json({message: 'The movie you requested could not be found.', status_code: 404});
+    }
 }));
 
 router.get('/tmdb/:id/images', asyncHandler(async (req, res) => {

@@ -165,3 +165,87 @@ export const getRecommendedMovies = async (movieId) => {
         throw error;
     }
 };
+
+// Actors Start
+
+export const getMovieActors = async (id) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.TMDB_KEY}&language=en-US`
+        );
+
+        if (!response.ok) {
+            throw new Error(response.json().message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getActorImages = async (id) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/person/${id}/images?api_key=${process.env.TMDB_KEY}`
+        );
+
+        if (!response.ok) {
+            throw new Error(response.json().message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getActor = async (id) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/person/${id}?api_key=${process.env.TMDB_KEY}`
+        );
+
+        if (!response.ok) {
+            throw new Error(response.json().message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+export const getActorMovies = async (actorID) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/person/${actorID}/movie_credits?api_key=${process.env.TMDB_KEY}`
+        );
+
+        if (!response.ok) {
+            throw new Error(response.json().message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+export const getActors = async () => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/person/popular?api_key=${process.env.TMDB_KEY}&language=en-US&page=1`
+        );
+
+        if (!response.ok) {
+            throw new Error(response.json().message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
