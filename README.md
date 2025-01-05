@@ -80,4 +80,4 @@ The interface has been improved to make the app more user-friendly.
  
 ## Independent learning (if relevant)
 
-Briefly explain any non-standard features developed for the app.   
+Favorites managment attempted, could not get to save for the signed in user.
