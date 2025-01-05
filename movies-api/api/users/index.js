@@ -62,4 +62,54 @@ async function authenticateUser(req, res) {
         res.status(401).json({ success: false, msg: 'Wrong password.' });
     }
 }
+
+router.post('/favorites', asyncHandler(async (req, res) => {
+    const { movieId } = req.body; // movieId from the request body
+    const { token } = req.headers; // Authentication token
+  
+      const decoded = jwt.verify(token, process.env.SECRET);  // Verify the token
+      const user = await User.findByUserName(decoded.username); // Find the user based on username in the token
+  
+      // Add the movie to the user's favorites array if it isn't already there
+      if (!user.favorites.includes(movieId)) {
+        user.favorites.push(movieId);
+        await user.save();
+        res.status(200).json({ success: true, msg: 'Movie added to favorites.' });
+      } else {
+        res.status(400).json({ success: false, msg: 'Movie is already in favorites.' });
+      }
+  }));
+  
+
+  router.delete('/favorites', asyncHandler(async (req, res) => {
+    const { movieId } = req.body; // movieId from the request body
+    const { token } = req.headers; // Authentication token
+  
+
+      const decoded = jwt.verify(token, process.env.SECRET);  // Verify the token
+      const user = await User.findByUserName(decoded.username); // Find the user
+  
+      // Remove the movie from the user's favorites array
+      user.favorites = user.favorites.filter(id => id.toString() !== movieId.toString());
+      await user.save();
+  
+      res.status(200).json({ success: true, msg: 'Movie removed from favorites.' });
+
+  }));
+  
+
+  router.get('/favorites', asyncHandler(async (req, res) => {
+    const { token } = req.headers; // Authentication token
+      const decoded = jwt.verify(token, process.env.SECRET);  // Verify the token
+      const user = await User.findByUserName(decoded.username).populate('favorites'); // Populate the 'favorites' array with movie data
+      if (!user) {
+        return res.status(404).json({ success: false, msg: 'User not found.' });
+      }
+  
+      res.status(200).json({ success: true, favorites: user.favorites });
+  }));
+  
+
+
+
 export default router;

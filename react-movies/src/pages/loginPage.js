@@ -7,11 +7,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Navigate, useLocation } from "react-router-dom";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-
-import { signOut } from "firebase/auth";
-import {auth} from "../firebase"
-import { signInUser } from "../firebase";
 import { AuthContext } from "../contexts/authContext";
 
 const LoginPage = props => {
