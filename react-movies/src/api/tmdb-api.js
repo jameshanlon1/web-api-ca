@@ -313,7 +313,7 @@ export const signup = async (username, password) => {
 
 export const getMovies = async () => {
   const response = await fetch(
-    'http://localhost:8080/api/movies', {
+    'http://localhost:8080/api/movies/tmdb/discover', {
     headers: {
       'Authorization': window.localStorage.getItem('token')
     }
