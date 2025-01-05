@@ -33,39 +33,39 @@
 //     });
 // };
 
-export const getTrendingMovies = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
-  )
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.status_message || "Something went wrong");
-        });
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      throw error;
-    });
-};
+// export const getTrendingMovies = () => {
+//   return fetch(
+//     `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+//   )
+//     .then((response) => {
+//       if (!response.ok) {
+//         return response.json().then((error) => {
+//           throw new Error(error.status_message || "Something went wrong");
+//         });
+//       }
+//       return response.json();
+//     })
+//     .catch((error) => {
+//       throw error;
+//     });
+// };
 
-export const getTopRatedMovies = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=200`
-  )
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.status_message || "Something went wrong");
-        });
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      throw error;
-    });
-};
+// export const getTopRatedMovies = () => {
+//   return fetch(
+//     `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=200`
+//   )
+//     .then((response) => {
+//       if (!response.ok) {
+//         return response.json().then((error) => {
+//           throw new Error(error.status_message || "Something went wrong");
+//         });
+//       }
+//       return response.json();
+//     })
+//     .catch((error) => {
+//       throw error;
+//     });
+// };
 
 export const getMovie = (args) => {
   //console.log(args)
@@ -336,6 +336,28 @@ export const getUpcomingMovies = async () => {
 export const getGenres = async () => {
   const response = await fetch(
     'http://localhost:8080/api/movies/tmdb/genres', {
+    headers: {
+      'Authorization': window.localStorage.getItem('token')
+    }
+  }
+  )
+  return response.json();
+};
+
+export const getTrendingMovies = async () => {
+  const response = await fetch(
+    'http://localhost:8080/api/movies/tmdb/trending', {
+    headers: {
+      'Authorization': window.localStorage.getItem('token')
+    }
+  }
+  )
+  return response.json();
+};
+
+export const getTopRatedMovies = async () => {
+  const response = await fetch(
+    'http://localhost:8080/api/movies/tmdb/topRated', {
     headers: {
       'Authorization': window.localStorage.getItem('token')
     }
