@@ -8,6 +8,9 @@ import { getTrendingMovies } from '../tmdb-api';
 import { getTopRatedMovies } from '../tmdb-api';
 import { searchMovies } from '../tmdb-api';
 import { getMovie } from '../tmdb-api';
+import { getMovieImages } from '../tmdb-api';
+import { getMovieReviews } from '../tmdb-api';
+import { getRecommendedMovies } from '../tmdb-api';
 
 
 const router = express.Router();
@@ -80,6 +83,24 @@ router.get('/tmdb/:id', asyncHandler(async (req, res) => {
     const { id } = req.params;
     const movie = await getMovie(id);
     res.status(200).json(movie);
+}));
+
+router.get('/tmdb/:id/images', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const images = await getMovieImages(id);
+    res.status(200).json(images);
+}));
+
+router.get('/tmdb/:id/reviews', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const reviews = await getMovieReviews(id);
+    res.status(200).json(reviews);
+}));
+
+router.get('/tmdb/:id/recommended', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const recommendations = await getRecommendedMovies(id);
+    res.status(200).json(recommendations);
 }));
 
 
